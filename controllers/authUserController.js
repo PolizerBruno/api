@@ -1,26 +1,21 @@
-const bcrypt = require('bcrypt')
-const knex = require('../config/connect')
+const db = require('../db/user')
+const bcrypt = require("bcrypt");
+
 
 const insert = async data => {
-  return await knex('user')
-    .insert(data)
-    .then(() => {
-      return true
-    })
-    .catch(err => err.sqlMessage)
+  return new Promise((resolve)=>{
+    resolve(db.insert(data))
+  })
 }
-
 const passwordToHash = data => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     data.password = bcrypt.hashSync(String(data.password), 10)
-    resolve(insert(data))
+    resolve(data)
   })
 }
 
 const verifySignPassword = async data => {
-  const request = await knex('user')
-    .where('email', data.email)
-    .select('name', 'email')
+  const request = await db.selectAll('email',data.email)
   return new Promise((resolve, reject) => {
     if (request.length == 0) {
       resolve(data)
@@ -62,5 +57,6 @@ module.exports.registerProcess = data => {
   return verifySignData(data)
     .then(verifySignPassword)
     .then(passwordToHash)
+    .then(insert)
     .catch(err => err)
 }

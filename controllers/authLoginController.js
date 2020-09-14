@@ -1,32 +1,28 @@
 const bcrypt = require("bcrypt");
-const knex = require("../config/connect");
 const { authSecret } = require("../.env");
 const jwt = require("jwt-simple");
+const db = require('../db/user')
 
-const signIn = async (data, res) => {
+const signIn = async (data) => {
   if (!data.email || !data.password) {
-    return new Promise((reject) => reject("Usuário ou senhas invalidos"));
+    return new Promise((reject) => reject("Preecha os campos corretamente"));
   }
-  const user = await knex("user").where({ email: data.email }).first();
+  const user = await db.selectOne('email',data.email);
   return new Promise((resolve, reject) => {
     if (user) {
       bcrypt.compare(data.password, user.password, (err, isMatch) => {
         if (err || !isMatch) {
-          reject("Usuario ou senhas invalidos");
+          reject("senha invalida");
         }
         const payload = { id: Math.random() * 1000000000 };
-        res.cookie("token", jwt.encode(payload, authSecret), {
-          maxAge: 300000,
-          httpOnly: true,
-        });
-        resolve(true);
+        resolve({"token" : jwt.encode(payload, authSecret)});
       });
     } else {
-      reject("Usuario ou senhas invalidos");
+      reject("Usuario não encontrado");
     }
   });
 };
 
-module.exports.authLoginToken = (data, res) => {
-  return signIn(data, res).catch((err) => err);
+module.exports.authLoginToken = (data) => {
+  return signIn(data).catch((err) => err);
 };
