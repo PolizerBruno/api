@@ -1,8 +1,5 @@
-const knex = require("../config/connect");
+const db = require("../db/task");
 
-
-
-
-module.exports.selectAll = (req,res) => {
-    
+module.exports.selectAll = (id) => {
+    return db.getAllTaskById(id)
 }

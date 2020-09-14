@@ -9,7 +9,6 @@ const taskManager = require("../controllers/taskManagerController");
 
 router.post("/signUp", async (req, res) => {
   const retorno = await authData.registerProcess(req.body);
-  console.log(retorno)
   if (retorno == true) {
     res.send("Cliente cadastrado com sucesso").status(200);
   } else {
@@ -18,28 +17,29 @@ router.post("/signUp", async (req, res) => {
 });
 
 router.post("/signIn", async (req, res) => {
-  const retorno = await authLogin.authLoginToken(req.body);
-  if (!!retorno.token) {
-    setToken(retorno.token,res)
+  const params = await authLogin.authLoginToken(req.body);
+  if (!!params.token){
+    setToken(params.token,res);
     res.redirect("/taskManager");
   } else {
-    res.send("Login inválido");
+    res.send(params);
   }
 });
 
 router.get("/taskManager", async (req, res) => {
-  const retorno = await authToken.authTokenValidate(req.cookies["token"]);
-  if (!!retorno.token) {
-    setToken(retorno.token,res);
-    res.send(200);
+  const params = await authToken.authTokenValidate(req.cookies["token"]);
+  if (!!params.token) {
+    setToken(params.token,res);
+    const query = await taskManager.selectAll(id) 
+    res.send(JSON.stringify(query));
   } else {
-    res.send('token invalido')
+    res.send(params)
   }
 });
 
 const setToken = (token,res) => {
   res.cookie("token", token, {
-    maxAge: 1000 * 60 * 5,
+    maxAge: 300000,
     httpOnly: true,
   });
 };

@@ -15,7 +15,7 @@ const passwordToHash = data => {
 }
 
 const verifySignPassword = async data => {
-  const request = await db.selectAll('email',data.email)
+  const request = await db.issetRegister('email',data.email)
   return new Promise((resolve, reject) => {
     if (request.length == 0) {
       resolve(data)

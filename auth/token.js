@@ -26,7 +26,7 @@ const validateToken = (token) => {
 
 const newToken = () => {
   return new Promise((resolve, reject) => {
-    const payload = { id: Math.random() * 1000000000 };
+    const payload = { id: Math.random()};
     resolve({ "token" : jwt.encode(payload, authSecret) });
   });
 };

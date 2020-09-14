@@ -1,21 +1,19 @@
+const cors = require('cors')
+const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
+const routes = require('./routes/routes')
 
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
+const express = require('express')
+const app = express()
 
-const routes = require("./routes/routes");
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cors())
+app.use(cookieParser())
+app.use(bodyParser.json())
+app.post('/signup', routes)
+app.post('/signIn', routes)
+app.get('/taskManager', routes)
 
-const express = require("express");
-const app = express();
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
-app.use(cookieParser());
-app.use(bodyParser.json());
-
-app.post("/signup", routes);
-app.post("/signIn", routes);
-app.get("/taskManager", routes);
-
-app.listen("3000", () => {
-  console.log("Api rodando");
-});
+app.listen('3000', () => {
+  console.log('Api rodando')
+})
