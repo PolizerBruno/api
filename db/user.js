@@ -8,11 +8,11 @@ module.exports.insert = async data => {
 
 module.exports.selectOne = (search, data) => {
   return knex('user')
-    .select('id', 'email', 'password')
+    .select('id', 'password')
     .where(search, '=', data)
     .first()
 }
-module.exports.selectAll = (search, data) => {
+module.exports.issetRegister = (search, data) => {
   return knex('user')
     .select('id')
     .where(search, '=', data)

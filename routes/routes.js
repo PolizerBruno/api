@@ -20,6 +20,7 @@ router.post("/signIn", async (req, res) => {
   const params = await authLogin.authLoginToken(req.body);
   if (!!params.token){
     setToken(params.token,res);
+    res.send({"id" : params.user_id})
     res.redirect("/taskManager");
   } else {
     res.send(params);
@@ -30,7 +31,7 @@ router.get("/taskManager", async (req, res) => {
   const params = await authToken.authTokenValidate(req.cookies["token"]);
   if (!!params.token) {
     setToken(params.token,res);
-    const query = await taskManager.selectAll(id) 
+    const query = await taskManager.selectAll(req.body.id) 
     res.send(JSON.stringify(query));
   } else {
     res.send(params)
