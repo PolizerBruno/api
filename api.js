@@ -12,7 +12,7 @@ app.use(cookieParser())
 app.use(bodyParser.json())
 app.post('/signup', routes)
 app.post('/signIn', routes)
-app.get('/taskManager', routes)
+app.post('/taskManager', routes)
 
 app.listen('3000', () => {
   console.log('Api rodando')

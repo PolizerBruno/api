@@ -27,12 +27,10 @@ const verifySignPassword = async data => {
 
 const verifySignData = data => {
   return new Promise((resolve, reject) => {
-    if (data.name.trim() && data.email.trim() && data.password.trim()){
-      /* Essa regex valida email no seguinte formato 
-        : xxxxxxxxx@xxxxx.xxx.xx, 
-        com ponto antes do @ 
-         xxxxxxx.xxxxxxxxx@xxx.xxx.xx*/
-      if (String(data.email).match(/[\w.+]+@[\w+]+\.[\w+]{2,3}.[\w+]{2}/gm)) {
+    if (data.name.trim() && data.email.trim() && data.password.trim() && data.comfirmPassword.trim() &&  data.comfirmPassword.trim()  ===  data.password.trim() ){
+      /* Essa regex valida email no seguinte formato implementação RFC 2822
+        */
+      if (!String(data.email).match(/[a-z0-9!#$%&'*+\=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/gm)) {
         reject('Email invalido')
       }
       if (
@@ -43,10 +41,10 @@ const verifySignData = data => {
         )
       ) {
         reject(
-          'A senha deve conter pelo menos 6 caracteres e no máximo 10, letras numeros'
+          'A senha deve conter pelo menos 6 caracteres e no máximo 10, letras e numeros'
         )
       }
-      resolve(data)
+      resolve({name : data.name,email : data.email,password:data.password})
     } else {
       reject('Insira dados válidos')
     }
