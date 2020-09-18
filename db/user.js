@@ -3,6 +3,7 @@ const knex = require('../config/connect')
 module.exports.insert = async data => {
   return await knex('user')
     .insert(data)
+    .then(true)
     .catch(err => err.sqlMessage)
 }
 
