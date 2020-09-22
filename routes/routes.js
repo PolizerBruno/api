@@ -9,7 +9,6 @@ const taskManager = require("../controllers/taskManagerController");
 
 router.post("/signUp", async (req, res) => {
   const retorno = await authData.registerProcess(req.body);
-  console.log(retorno)
   if (retorno === true) {
     res.status(201).send("Cliente cadastrado com sucesso")
   } else {
@@ -38,17 +37,35 @@ router.post("/taskManager", async (req, res) => {
   }
 });
 router.post("/taskInsert", async (req, res) => {
-  console.log(req.body)
   const params = await authToken.authTokenValidate(req.cookies["token"]);
   if (!!params.token) {
     setToken(params.token,res);
     const query = await taskManager.insertTask(req.body) 
-    console.log(query)
     res.status(201).send(JSON.stringify(query))
   } else {
     res.status(404).send(params)
   }
 });
+
+router.post("/updateTask",async (req,res)=>{
+  const params = await authToken.authTokenValidate(req.cookies["token"]);
+  if (!!params.token) {
+    const query = await taskManager.updateTask(req.body) 
+    res.status(201).send(JSON.stringify(query))
+  } else {
+    res.status(404).send(params)
+  }
+})
+
+router.post("/deleteTask",async (req,res)=>{
+  const params = await authToken.authTokenValidate(req.cookies["token"]);
+  if (!!params.token) {
+    const query = await taskManager.deleteTask(req.body) 
+    res.status(201).send(JSON.stringify(query))
+  } else {
+    res.status(404).send(params)
+  }
+})
 
 const setToken = (token,res) => {
   res.cookie("token", token, {

@@ -13,6 +13,8 @@ app.post('/signup', routes)
 app.post('/signIn', routes)
 app.post('/taskManager', routes)
 app.post('/taskInsert',routes)
+app.post('/updateTask',routes)
+app.post('/deleteTask',routes)
 
 app.listen('3000', () => {
   console.log('Api rodando')

@@ -7,3 +7,10 @@ module.exports.selectAll = (id) => {
 module.exports.insertTask = (data) => {
     return db.insertTask(data)
 }
+
+module.exports.updateTask = (data) => {
+    return db.updateTask(data)
+}
+module.exports.deleteTask = data =>{
+    return db.deleteTask(data)
+}
